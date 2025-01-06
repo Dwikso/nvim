@@ -38,7 +38,6 @@ return {
     -- https://github.com/glepnir/lspsaga.nvim#lspsaga-symbols-in-winbar
     symbol_in_winbar = {
       enable = true,
-      separator = " %#WinbarSeparator# ",
     },
     beacon = {
       enable = false,

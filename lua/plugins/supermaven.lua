@@ -3,7 +3,7 @@ return {
   main = "supermaven-nvim",
   opts = {
     keymaps = {
-      accept_suggestion = '<C-j>',
+      accept_suggestion = '<leader>w',
       accept_word = '<C-l>'
     },
     ignore_filetypes = {
