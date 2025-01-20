@@ -6,17 +6,18 @@ return {
   },
   opts = {
     formatters_by_ft = {
-      python = { { "autopep8" } },
-      javascript = { { "eslint_c", "prettier" } },
-      javascriptreact = { { "eslint_c", "prettier" } },
-      typescript = { { "eslint_c", "prettier" } },
-      typescriptreact = { { "eslint_c", "prettier" } },
-      mdx = { { "prettier" } },
-      md = { { "prettier" } },
-      json = { { "prettier" } },
-      astro = { { "prettier" } },
-      css = { { "prettier" } }
+      python = { "autopep8" },
+      javascript = { "eslint_c", "prettier" },
+      javascriptreact = { "eslint_c", "prettier" },
+      typescript = { "eslint_c", "prettier" },
+      typescriptreact = { "eslint_c", "prettier" },
+      mdx = { "prettier" },
+      md = { "prettier" },
+      json = { "prettier" },
+      astro = { "prettier" },
+      css = { "prettier" }
     },
+    stop_after_first = true, -- Utiliser stop_after_first comme recommandé
     format_on_save = {
       quiet = true,
       timeout_ms = 500,

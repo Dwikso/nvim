@@ -7,15 +7,17 @@ return {
     { "hrsh7th/cmp-nvim-lsp", },
     { "L3MON4D3/LuaSnip", },
     { "elixir-tools/elixir-tools.nvim", },
-    { "pmizio/typescript-tools.nvim", },
-    { "mrcjkb/rustaceanvim", lazy = false }
+    { "mrcjkb/rustaceanvim",                lazy = false },
+    { "luckasRanarison/tailwind-tools.nvim" }
   },
   config = function()
+    -- Default server
     local managed_servers_list = {
       "astro",
       "cssls",
       "docker_compose_language_service",
       "dockerls",
+      "eslint",
       "html",
       "jsonls",
       "lua_ls",
@@ -23,13 +25,13 @@ return {
       "svelte",
       "volar",
       "yamlls",
+      "vtsls",
     }
 
     local manual_servers_list = {
       "ocamllsp",
+      "tailwindcss",
       "gleam",
-      "tsserver",
-      "jdtls"
     }
 
     local servers_list = {}
@@ -40,12 +42,15 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = managed_servers_list,
     })
-
     local cmp = require("cmp")
     local luasnip = require("luasnip")
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
     local lsp_config = require("lspconfig")
+    local utils = require('lspconfig.util')
 
+
+
+    -- Completion engine setup
     cmp.setup({
       snippet = {
         expand = function(args)
@@ -61,7 +66,7 @@ return {
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
@@ -88,7 +93,9 @@ return {
         { name = "buffer" },
       }),
     })
+    -- End completion engine setup
 
+    -- Diagnostic customization
     vim.diagnostic.config({
       float = {
         source = true,
@@ -96,10 +103,12 @@ return {
       },
     })
 
+    -- Global key mapping
     vim.keymap.set("n", "ge", vim.diagnostic.open_float, { desc = "open diagnostic popup" })
     vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
     vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
 
+    -- Custom handlers to have border around hover window
     local border = {
       { "╭", "FloatBorder" },
       { "─", "FloatBorder" },
@@ -117,6 +126,7 @@ return {
       }),
     }
 
+    -- Callback executed when a server is attached to a buffer
     local on_attach_callback = function(client, buffer)
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration", buffer = buffer })
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition", buffer = buffer })
@@ -140,13 +150,7 @@ return {
       })
     end
 
-    -- TypeScript tools setup
-    local tstools = require("typescript-tools")
-    tstools.setup({
-      on_attach = on_attach_callback,
-      handlers = handlers,
-    })
-
+    -- Language specific extensions
     local elixir = require("elixir")
     local elixirls = require("elixir.elixirls")
 
@@ -155,6 +159,16 @@ return {
         enable = false,
         on_attach = on_attach_callback,
         handlers = handlers,
+        init_options = {
+          mix_env = "dev",
+          mix_target = "host",
+          experimental = {
+            completions = {
+              enable = true -- control if completions are enabled. defaults to false
+            }
+          }
+        },
+
       },
       credo = {},
       elixirls = {
@@ -168,7 +182,29 @@ return {
       }
     }
 
+
+    -- Tailwind setup
+    lsp_config.tailwindcss.setup(vim.tbl_extend(
+      "force",
+      {
+        capabilities = capabilities,
+        handlers = handlers,
+      },
+      {
+        filetypes = { "html", "elixir", "eelixir", "heex" },
+        init_options = {
+          userLanguages = {
+            elixir = "html-eex",
+            eelixir = "html-eex",
+            heex = "html-eex",
+          },
+        },
+      }
+    ))
+
+    -- Rust setup
     vim.g.rustaceanvim = {
+      -- LSP configuration
       server = {
         on_attach = on_attach_callback,
         handlers = handlers,
@@ -176,4 +212,3 @@ return {
     }
   end,
 }
-
