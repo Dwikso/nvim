@@ -27,6 +27,7 @@ return {
       "vue",
       "svelte",
       "zig",
+      "java",
     },
     highlight = {
       enable = true,

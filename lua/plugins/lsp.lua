@@ -26,6 +26,7 @@ return {
       "volar",
       "yamlls",
       "vtsls",
+      "jdtls",
     }
 
     local manual_servers_list = {
