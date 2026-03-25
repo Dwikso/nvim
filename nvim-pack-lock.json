@@ -29,6 +29,10 @@
       "rev": "561126520034a1dac2f78ab063db025d12555998",
       "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
+    "horizon.nvim": {
+      "rev": "b4d7b1e7c3aa77aea31b9ced8960e49fd8682c47",
+      "src": "https://github.com/akinsho/horizon.nvim"
+    },
     "lazygit.nvim": {
       "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
       "src": "https://github.com/kdheepak/lazygit.nvim"
@@ -68,6 +72,10 @@
     "neo-tree.nvim": {
       "rev": "ba1ccb6ec201bde095ccb26feed3d4f7cc8d09ee",
       "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
+    },
+    "neovim": {
+      "rev": "cf2a288696b03d0934da713d66c6d71557b5c997",
+      "src": "https://github.com/rose-pine/neovim"
     },
     "noice.nvim": {
       "rev": "7bfd942445fb63089b59f97ca487d605e715f155",
@@ -117,6 +125,10 @@
     "supermaven-nvim": {
       "rev": "07d20fce48a5629686aefb0a7cd4b25e33947d50",
       "src": "https://github.com/supermaven-inc/supermaven-nvim"
+    },
+    "vim-monochrome": {
+      "rev": "c4f18812bbdbe640ffddf69e0c5734ec87d6b5e7",
+      "src": "https://github.com/fxn/vim-monochrome"
     },
     "vim-sleuth": {
       "rev": "be69bff86754b1aa5adcbb527d7fcd1635a84080",
