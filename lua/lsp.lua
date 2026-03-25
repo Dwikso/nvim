@@ -35,24 +35,22 @@ function lsp.init()
       "vtsls",
     },
   })
-  require("blink.cmp").setup({
+ 
+require("blink.cmp").setup({
     keymap = {
-      preset = "default",
-      ["<Tab>"] = { "select_next", "fallback" },
-      ["<S-Tab>"] = { "select_prev", "fallback" },
-    },
-    sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      ['<CR>'] = { "accept", "fallback" },
+      ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      ['<Tab>'] = { 'select_next', 'fallback' },
     },
     completion = {
       documentation = {
         auto_show = true,
         auto_show_delay_ms = 500,
-      },
-      ghost_text = {
-        enabled = true,
-      },
+      }
     },
+    sources = {
+      default = { 'lsp' }
+    }
   })
 
   vim.diagnostic.config({
