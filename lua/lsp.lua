@@ -33,6 +33,7 @@ function lsp.init()
       "svelte",
       "yamlls",
       "vtsls",
+      "jdtls",
     },
   })
  
@@ -49,7 +50,11 @@ require("blink.cmp").setup({
       }
     },
     sources = {
-      default = { 'lsp' }
+      default = { 'lsp', 'path', 'snippets', 'buffer' }
+    },
+    -- Use native Neovim 0.11+ snippets
+    snippets = {
+      preset = 'default'
     }
   })
 
@@ -64,7 +69,8 @@ require("blink.cmp").setup({
   local mason_path = vim.fn.expand("$HOME/.local/share/nvim/mason/packages")
   local vue_plugin_path = mason_path .. "/vue-language-server/node_modules/@vue/typescript-plugin"
 
-  require("lspconfig").vtsls.setup({
+  -- Using the new Neovim 0.11+ / nvim-lspconfig approach
+  local vtsls_config = {
     on_attach = function(client, _)
       client.server_capabilities.documentFormattingProvider = false
     end,
@@ -87,16 +93,29 @@ require("blink.cmp").setup({
         tsdk = mason_path .. "/vtsls/node_modules/@vtsls/language-server/node_modules/typescript/lib",
       },
     },
-  })
+  }
 
-  -- Enable everything except vtsls (already handled above)
-  local enabled_servers = {}
-  for _, server in ipairs(servers) do
-    if server ~= "vtsls" and server ~= "volar" then
-      table.insert(enabled_servers, server)
+  -- Use native vim.lsp.config if available
+  if vim.lsp.config then
+    vim.lsp.config("vtsls", vtsls_config)
+    vim.lsp.enable("vtsls")
+
+    -- Enable other servers using the new API
+    for _, server in ipairs(servers) do
+      if server ~= "vtsls" and server ~= "volar" then
+        vim.lsp.enable(server)
+      end
+    end
+  else
+    -- Fallback for older versions (unlikely for 0.12)
+    local lspconfig = require("lspconfig")
+    lspconfig.vtsls.setup(vtsls_config)
+    for _, server in ipairs(servers) do
+      if server ~= "vtsls" and server ~= "volar" then
+        lspconfig[server].setup({})
+      end
     end
   end
-  vim.lsp.enable(enabled_servers)
 end
 
 return lsp

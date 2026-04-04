@@ -38,9 +38,11 @@ function plugins.init()
 
     "supermaven-inc/supermaven-nvim",                                  -- AI Completion plugin
     "neovim/nvim-lspconfig",                                           -- LSP base configurations
+    "mfussenegger/nvim-jdtls",                                         -- Java LSP helper
     "williamboman/mason.nvim",                                         -- LSP / Tools Installer
     "williamboman/mason-lspconfig.nvim",                               -- Helper for mason
     { src = "saghen/blink.cmp",    version = vim.version.range("*") }, -- LSP completion plugin
+    "rafamadriz/friendly-snippets",                                    -- Snippets collection
     "nvim-lualine/lualine.nvim",                                       -- Status line plugin
     { src = "echasnovski/mini.comment",  version = "main" },           -- Comment plugin
     "JoosepAlviste/nvim-ts-context-commentstring",                     -- Contextual commentstring
@@ -142,6 +144,7 @@ function plugins.configure()
     "svelte",
     "swift",
     "zig",
+    "java",
   })
   require("nvim-ts-autotag").setup()
   local comments = require("mini.comment")
