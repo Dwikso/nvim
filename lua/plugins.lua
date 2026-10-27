@@ -49,7 +49,19 @@ function plugins.init()
     { src = "echasnovski/mini.pairs",    version = "main" },           -- Autopairs plugin
     { src = "echasnovski/mini.surround", version = "main" },           -- Symbol surround plugin
     "tpope/vim-sleuth",                                                -- Auto indent detection
-    "nvim-pack/nvim-spectre",                                          -- Search and replace
+    "MagicDuck/grug-far.nvim",                                         -- Search and replace
+    "folke/flash.nvim",                                                -- Jump anywhere on screen
+    "folke/trouble.nvim",                                              -- Diagnostics / references list
+    "folke/todo-comments.nvim",                                        -- Highlight and list TODO/FIX/...
+    "nvim-treesitter/nvim-treesitter-context",                         -- Sticky current function header
+    { src = "echasnovski/mini.ai",       version = "main" },           -- Better text objects
+    "sindrets/diffview.nvim",                                          -- Git diffs and file history
+    "stevearc/oil.nvim",                                               -- Edit directories like a buffer
+    { src = "ThePrimeagen/harpoon",      version = "harpoon2" },       -- Quick file marks
+    "nvim-neotest/nvim-nio",                                           -- Dependency of nvim-dap-ui
+    "mfussenegger/nvim-dap",                                           -- Debugger
+    "rcarriga/nvim-dap-ui",                                            -- Debugger UI
+    "MeanderingProgrammer/render-markdown.nvim",                       -- Pretty markdown in buffer
     "arnamak/stay-centered.nvim",                                      -- Centered mode
     { src = "nvim-treesitter/nvim-treesitter", version = "main" },     -- Treesitter
     "windwp/nvim-ts-autotag",                                          -- Treesitter extension for auto-tag
@@ -141,6 +153,29 @@ function plugins.configure()
   end
   dropbar_highlights()
   vim.api.nvim_create_autocmd("ColorScheme", { callback = dropbar_highlights })
+  --#endregion
+
+  --#region Extra tools
+  require("flash").setup({
+    modes = { char = { enabled = false } }, -- Keep the default f/t/F/T behavior
+  })
+  require("trouble").setup()
+  require("todo-comments").setup()
+  require("treesitter-context").setup({ max_lines = 3 })
+  require("mini.ai").setup()
+  require("diffview").setup()
+  require("oil").setup({
+    default_file_explorer = false, -- Let neo-tree keep handling `nvim .`
+  })
+  require("harpoon"):setup()
+  require("render-markdown").setup()
+
+  local dap, dapui = require("dap"), require("dapui")
+  dapui.setup()
+  -- Open/close the debugger UI automatically with the debug session
+  dap.listeners.after.event_initialized["dapui"] = function() dapui.open() end
+  dap.listeners.before.event_terminated["dapui"] = function() dapui.close() end
+  dap.listeners.before.event_exited["dapui"] = function() dapui.close() end
   --#endregion
 
   --#region Lualine
@@ -248,19 +283,7 @@ function plugins.configure()
   --#endregion
 
   --#region Tools
-  local spectre = require("spectre")
-  spectre.setup({
-    replace_engine = {
-      ["sed"] = {
-        cmd = "sed",
-        args = {
-          "-i",
-          "",
-          "-E",
-        },
-      },
-    },
-  })
+  require("grug-far").setup()
 
   local pick = require("mini.pick")
   pick.setup()

@@ -94,6 +94,48 @@ function keys.init()
 
   -- Terminal
   vim.keymap.set("n", "<leader>t", require('FTerm').toggle, { desc = "Open terminal" })
+
+  -- Flash (jump)
+  vim.keymap.set({ "n", "x", "o" }, "gs", function() require("flash").jump() end, { desc = "Flash jump" })
+  vim.keymap.set({ "n", "x", "o" }, "gS", function() require("flash").treesitter() end, { desc = "Flash treesitter select" })
+
+  -- Trouble / Todo
+  vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (project)" })
+  vim.keymap.set("n", "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Diagnostics (buffer)" })
+  vim.keymap.set("n", "<leader>xs", "<cmd>Trouble symbols toggle focus=false<cr>", { desc = "Symbols" })
+  vim.keymap.set("n", "<leader>xr", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", { desc = "LSP references/definitions" })
+  vim.keymap.set("n", "<leader>xt", "<cmd>Trouble todo toggle<cr>", { desc = "Todo list" })
+  vim.keymap.set("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Next todo comment" })
+  vim.keymap.set("n", "[t", function() require("todo-comments").jump_prev() end, { desc = "Previous todo comment" })
+
+  -- Git (diffview)
+  vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Diffview open" })
+  vim.keymap.set("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", { desc = "File history" })
+  vim.keymap.set("n", "<leader>gq", "<cmd>DiffviewClose<cr>", { desc = "Diffview close" })
+
+  -- Oil
+  vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory (Oil)" })
+
+  -- Search and replace
+  vim.keymap.set("n", "<leader>sr", function() require("grug-far").open() end, { desc = "Search and replace" })
+
+  -- Harpoon
+  local harpoon = require("harpoon")
+  vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon add file" })
+  vim.keymap.set("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon menu" })
+  for i = 1, 4 do
+    vim.keymap.set("n", "<leader>" .. i, function() harpoon:list():select(i) end, { desc = "Harpoon file " .. i })
+  end
+
+  -- Debugger
+  local dap = require("dap")
+  vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
+  vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Start / continue" })
+  vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step over" })
+  vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step into" })
+  vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step out" })
+  vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Stop debugging" })
+  vim.keymap.set("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Toggle debugger UI" })
 end
 
 return keys
