@@ -36,8 +36,8 @@ function opts.init()
 
   -- Rend le comportement de la touche Tab plus intelligent
   vim.opt.softtabstop = 2
-  vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-  vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+  vim.opt.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 end
 
 return opts

@@ -95,8 +95,16 @@ require("blink.cmp").setup({
     },
   }
 
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  if pcall(require, "blink.cmp") then
+    capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+  end
+
   -- Use native vim.lsp.config if available
   if vim.lsp.config then
+    vim.lsp.config("*", {
+      capabilities = capabilities,
+    })
     vim.lsp.config("vtsls", vtsls_config)
     vim.lsp.enable("vtsls")
 

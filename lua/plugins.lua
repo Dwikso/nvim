@@ -71,6 +71,32 @@ function plugins.init()
 end
 
 function plugins.configure()
+  require("gruvbox").setup({
+    transparent_mode = true, -- Let the terminal's transparency (and compositor blur) show through
+    italic = {
+      strings = false,
+      emphasis = true,
+      comments = true,
+      operators = false,
+      folds = true,
+    },
+    overrides = {
+      Keyword = { italic = true },
+      Statement = { italic = true },
+      Conditional = { italic = true },
+      Repeat = { italic = true },
+      Exception = { italic = true },
+      ["@keyword"] = { italic = true },
+      ["@keyword.conditional"] = { italic = true },
+      ["@keyword.repeat"] = { italic = true },
+      ["@keyword.return"] = { italic = true },
+      ["@keyword.function"] = { italic = true },
+      ["@keyword.import"] = { italic = true },
+      ["@type.builtin"] = { italic = true },
+      ["@variable.builtin"] = { italic = true },
+      ["@variable.parameter"] = { italic = true },
+    },
+  })
   vim.cmd("colorscheme gruvbox")
 
   require("which-key").setup()
@@ -101,6 +127,7 @@ function plugins.configure()
   --#region Neotree
   local neotree = require("neo-tree")
   neotree.setup({
+    popup_border_style = "rounded",
     enable_diagnostics = false,
     enable_git_status = false,
     filesystem = {
@@ -248,6 +275,15 @@ function plugins.configure()
   local stay_centered = require("stay-centered")
 
   noice.setup({
+    routes = {
+      {
+        filter = {
+          event = "notify",
+          find = "Terminal did not respond to DSR request",
+        },
+        opts = { skip = true },
+      },
+    },
     presets = {
       bottom_search = true,         -- use a classic bottom cmdline for search
       command_palette = true,       -- position the cmdline and popupmenu together
@@ -257,10 +293,14 @@ function plugins.configure()
     },
   })
   notify.setup({
+    background_colour = "#282828", -- Needed because gruvbox is transparent (gruvbox dark bg)
     stages = "fade_in_slide_out",
     timeout = 3000,
     render = "compact",
     top_down = false,
+  })
+  require("FTerm").setup({
+    border = "rounded",
   })
   stay_centered.setup({
     enabled = false
@@ -299,7 +339,7 @@ function plugins.configure()
       command = util.from_node_modules("eslint_d"),
       args = { "--fix-to-stdout", "--stdin", "--stdin-filename", "$FILENAME" },
       cwd = util.root_file({
-        "eslist.config.mjs",
+        "eslint.config.mjs",
         ".eslintrc",
         ".eslintrc.js",
       }),
@@ -347,7 +387,7 @@ function plugins.configure()
     format_on_save = {
       quiet = true,
       timeout_ms = 500,
-      lsp_fallback = "fallback",
+      lsp_format = "fallback",
     },
   })
   --#endregion

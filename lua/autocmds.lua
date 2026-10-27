@@ -18,17 +18,12 @@ function autocmds.init()
     end,
   })
 
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    group = augroup("format_on_save"),
+  vim.api.nvim_create_autocmd("FileType", {
+    group = augroup("treesitter_start"),
     pattern = "*",
-    callback = function(args)
-      require("conform").format({ bufnr = args.buf, lsp_fallback = true, async = false })
+    callback = function()
+      pcall(vim.treesitter.start)
     end,
-  })
-
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = { '<filetype>' },
-    callback = function() vim.treesitter.start() end,
   })
 end
 
