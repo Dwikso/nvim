@@ -100,6 +100,49 @@ function plugins.configure()
   })
   --#endregion
 
+  --#region Dropbar (winbar breadcrumbs)
+  require("dropbar").setup({
+    sources = {
+      path = {
+        -- Show the path starting from the project folder (git root, or cwd),
+        -- so the folder name is always visible, even for files at the root
+        relative_to = function(buf, win)
+          local ok, cwd = pcall(vim.fn.getcwd, win)
+          local root = vim.fs.root(buf, ".git") or (ok and cwd) or vim.fn.getcwd()
+          return vim.fs.dirname(root)
+        end,
+      },
+    },
+    icons = {
+      ui = {
+        bar = {
+          separator = " ▸ ",
+          extends = "…",
+        },
+      },
+      kinds = {
+        symbols = {
+          Folder = "\u{e5fe} ", -- nf-custom-folder_open (smaller)
+          Variable = "\u{ea88} ", -- nf-cod-symbol_variable
+        },
+      },
+    },
+  })
+
+  -- Colors close to the screenshot: transparent bar, red folder and separator
+  local function dropbar_highlights()
+    local set = vim.api.nvim_set_hl
+    set(0, "WinBar", { bg = "NONE" })
+    set(0, "WinBarNC", { bg = "NONE" })
+    set(0, "DropBarIconKindFolder", { fg = "#fb4934" })
+    set(0, "DropBarIconUISeparator", { fg = "#fb4934" })
+    set(0, "DropBarKindFolder", { fg = "#ebdbb2" })
+    set(0, "DropBarKindFile", { fg = "#ebdbb2" })
+  end
+  dropbar_highlights()
+  vim.api.nvim_create_autocmd("ColorScheme", { callback = dropbar_highlights })
+  --#endregion
+
   --#region Lualine
   local lualine = require("lualine")
   lualine.setup({
@@ -145,6 +188,12 @@ function plugins.configure()
     "swift",
     "zig",
     "java",
+    "python",
+    "c",
+    "cpp",
+    "bash",
+    "dockerfile",
+    "astro",
   })
   require("nvim-ts-autotag").setup()
   local comments = require("mini.comment")
